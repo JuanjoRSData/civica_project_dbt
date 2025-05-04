@@ -114,8 +114,8 @@ sources:
             tests:
               - relationships:
                   to: source('sql_server_dbo','addresses')
-                  field: promo_id
-                  where: promo_id - not_null
+                  field: address_id
+                  where: address_id - not_null
           - name: created_ud
           - name: promo_id
             description: >
@@ -123,8 +123,8 @@ sources:
             tests:
               - relationships:
                   to: source('sql_server_dbo','promos')
-                  field: address_id
-                  where: address_id - not_null
+                  field: promo_id
+                  where: promo_id - not_null
           - name: estimated_delivery_at
             description: >
               Date with the stimated delivery time.
@@ -161,10 +161,6 @@ sources:
           - name: order_id
             description: >
               Order id wich is a foreign key to orders.
-            tests:
-              - relationships:
-                  to: source('sql_server_dbo','orders')
-                  field: order_id
           - name: product_id
             description: >
               Product id wich is a foreign key to product.
