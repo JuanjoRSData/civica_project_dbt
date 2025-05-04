@@ -1,0 +1,19 @@
+{{
+    config(
+        materialized='view'
+    )
+}}
+
+WITH src_users AS (
+    SELECT * 
+    FROM {{ source('sql_server_dbo', 'users')}}
+),
+renamed_casted AS (
+    SELECT 
+      user_id,
+      updated_at,
+      addres_id,
+ 
+    FROM src_promo
+)
+SELECT * FROM renamed_casted
