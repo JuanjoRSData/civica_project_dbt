@@ -17,7 +17,6 @@ sources:
     loaded_at_field: _fivetran_synced
 
     tables:
-
       - name: addresses
         columns:
           - name: addresses_id
@@ -140,6 +139,7 @@ sources:
               - relationships:
                   to: source('sql_server_dbo','users')
                   field: user_id
+                  where: user_id - not_null
           - name: order_total
             description: >
               Order cost plus shipping cost as float.
@@ -154,6 +154,8 @@ sources:
               Status of the order, it has three of them (delivered, preparing, shipped) as a string.
             tests:
               - not_null
+              - accepted_values:
+                  values: ['delivered', 'preparing', 'shipped']
           - name: fivetran_deleted
           - name: _fivetran_synced
       - name: order_items
@@ -161,6 +163,11 @@ sources:
           - name: order_id
             description: >
               Order id wich is a foreign key to orders.
+            tests:
+              - relationships:
+                  to: source('sql_server_dbo','orders')
+                  field: order_id
+                  where: order_id - not_null
           - name: product_id
             description: >
               Product id wich is a foreign key to product.
@@ -168,6 +175,7 @@ sources:
               - relationships:
                   to: source('sql_server_dbo','products')
                   field: product_id
+                  where: order_id - not_null
           - name: quantity
             description: >
               Quntity of a unique product as number.
@@ -205,6 +213,9 @@ sources:
               Percentage of discount associate to this promo as number.
             tests:
               - not_null
+              - dbt_utils.accepted_range:
+                  min_value: 0
+                  max_value: 100
           - name: status
             description: >
               If it's active or inactive as varchar.
@@ -230,6 +241,11 @@ sources:
           - name: address_id
             description: >
               Hashed address_id, it will be an foreign key to address.
+            tests:
+              - relationships:
+                  to: source('sql_server_dbo','addresses')
+                  field: address_id
+                  where: address_id - not_null
           - name: last_name
             description: >
               varchar.

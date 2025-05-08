@@ -1,0 +1,134 @@
+version: 2
+
+models:
+  - name: stg_products
+    description: Contiene los datos de cada producto
+    docs:
+      node_color: "#3498db"
+    columns:
+      - name: product_id
+        description: Identificador unico hashedo
+        tests:
+          - not_null
+          - unique
+      - name: price
+        description: Precio del producto en ¿dolares?
+      - name: inventory
+        description: Cantidad del producto en stock
+      - name: _fivetran_deleted
+        description: Valor booleano que define si fue borrado o no
+      - name: date_load
+        description: Fecha en la que se carga el dato
+  - name: stg_addresses
+    description: Contiene los datos de las direcciones (addresses)
+    docs:
+      node_color: "#3498db"
+    columns:
+      - name: address_id
+        description: Identificador unico hashedo
+        tests:
+          - not_null
+          - unique
+      - name: zipcode
+        description: Codigo postal
+      - name: discount
+        description: Descuento a aplicar sobre esta promocion en porcentaje
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 100
+      - name: _fivetran_deleted
+        description: Valor booleano que define si fue borrado o no
+      - name: date_load
+        description: Fecha en la que se carga el dato
+
+
+  - name: stg_promos
+    description: Contiene los datos de las promociones que se aplicarán a las orders
+    docs:
+      node_color: "#3498db"
+    columns:
+      - name: promo_id
+        description: Es el nombre de la promo hashado
+        tests:
+          - not_null
+          - unique
+      - name: name
+        description: Nombre de la promocion
+        tests:
+          - not_null
+          - unique
+      - name: discount
+        description: Descuento a aplicar sobre esta promocion en porcentaje
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 100
+      - name: _fivetran_deleted
+        description: Valor booleano que define si fue borrado o no
+      - name: date_load
+        description: fecha en la que se carga el dato
+
+
+  - name: stg_date
+    description: Dimensión de tiempo/calendario generada a partir de date_spine
+    docs:
+      node_color: "#3498db"
+    columns:
+      - name: date_id
+        description: Fecha en formato YYYY-MM-DD que se utilizará como identificador unico
+        tests:
+          - not_null
+          - unique
+      - name: fecha
+        description: Fecha en formato YYYY-MM-DD
+        tests:
+          - not_null
+          - unique
+          
+      - name: dia
+        description: Día del mes (1-31)
+
+      - name: mes
+        description: Número del mes (1-12)
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] 
+
+      - name: nombre_mes
+        description: Nombre completo del mes (January-December)
+      
+      - name: anio
+        description: Año numérico (YYYY)
+        tests:
+          - not_null
+
+      # Semanas
+      - name: semana_del_anio
+        description: Número de semana según estándar ISO (1-53)
+        tests:
+          - not_null
+          - accepted_values:
+              values: "{{ range(1, 54) | list }}"
+
+      # Trimestres
+      - name: trimestre
+        description: Trimestre del año (1-4)
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4]
+      
+      # Días de semana
+      - name: dia_semana_numero
+        description: Número del día de semana (1=Lunes-0=Domingo)
+      
+      - name: nombre_dia
+        description: Nombre del día de semana (Monday-Sunday)
+
+      - name: tipo_dia
+        description: Indica si es fin de semana (sábado o domingo)
+        tests:
+          - accepted_values:
+              values: [true, false]

@@ -21,7 +21,17 @@ sources:
         loaded_at_field: _fivetran_synced
         columns:
           - name: _row
+            description: >
+              Number of the row position at the DB it will be deleted.
           - name: product_id
+            description: >
+              Identifier hashed for product_id.
           - name: quantity
+            description: >
+              Number of the row position at the DB it will be deleted.
           - name: month
+            description: >
+              Number of the row position at the DB it will be deleted.
           - name: _fivetran_synced
+            description: >
+              Number of the row position at the DB it will be deleted.
