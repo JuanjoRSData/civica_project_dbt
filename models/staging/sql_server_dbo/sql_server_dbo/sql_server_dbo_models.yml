@@ -1,10 +1,137 @@
 version: 2
 
 models:
-  - name: stg_products
-    description: Contiene los datos de cada producto
+  - name: stg_orders
+    description: Datos de los pedidosrealizados.
     docs:
       node_color: "#3498db"
+    columns:
+    - name: orders_id
+      description: Identificador único formado por el haasheo del order_id que recibimos.
+      tests:
+        - not_null
+        - unique
+    - name: shipping_service_id
+      description: Clave foranea a la tabla shipping_services.
+    - name: shipping_cost
+      description: Coste del pedido.
+    - name: address_id
+      description: Dirección a la que se envia el pedido.
+    - name: shipping_cost
+      description: Coste del pedido.
+    - name: created_at
+      description: Fecha de creación.
+    - name: date_created_at
+      description: Fecha de creación casteada a formato 'dd/mm/yy' para poder relacionarla con la tabla dates.
+    - name: promo_id
+      description: Clave foranea a la tabla promos
+    - name: estimated_delivery_at
+      description: Tiempo estimado de entrega
+    - name: date_estimated_delivery_at
+      description: Tiempo estimado de entrega casteada a formato 'dd/mm/yy' para poder relacionarla con la tabla dates.  
+    - name: order_cost
+      description: Precio del pedido.      
+    - name: user_id
+      description: Clave foranea a la tabla users. 
+    - name: order_total
+      description: Precio del pedido sumandole el coste de envio.   
+    - name: delivered_at
+      description: Fecha de el momento de salida del envio.  
+    - name: status
+      description: Tipo de evento [delivered, preparing, shipped].  
+    - name: status
+      description: Tipo de evento [delivered, preparing, shipped].  
+    - name: _fivetran_deleted
+      description: Fecha de borrado.
+    - name: date_load
+      description: Fecha de carga desde fivetran.
+
+  - name: stg_events
+    description: Datos de eventos referentes a la página web.
+    docs:
+      node_color: "#3498db"
+    columns:
+    - name: event_id
+      description: Identificador único formado por el haasheo del event_id que recibimos.
+      tests:
+        - not_null
+        - unique
+    - name: page_url
+      description: Página donde ocurren los eventos.
+    - name: event_type
+      description:  Tipo de evento [checkout, package_shipped, add_to_cart, page_view].
+    - name: user_id
+      description: Clave foranea que referencia la tabla users.
+    - name: session_id
+      description: Identificador único de session.
+    - name: created_at
+      description: Fecha de creación.
+    - name: order_id
+      description: Clave foranea que referencia la tabla orders.
+    - name: _fivetran_deleted
+      description: Fecha de borrado.
+    - name: date_load
+      description: Fecha de carga desde fivetran.
+
+  - name: stg_users
+    description: Datos de usuario.
+    docs:
+      node_color: "#3498db"
+    columns:
+    - name: user_id
+      description: Identificador único formado por el haasheo del user_id que recibimos.
+      tests:
+        - not_null
+        - unique
+    - name: updated_at
+      description: Fecha de la actualización.
+    - name: address_id
+      description: Clave foranea a la tabla addresses.
+    - name: last_name
+      description: Apellido del usuario.
+    - name: created_at
+      description: Fecha de cración.
+    - name: phone_number
+      description: Teléfono de usuario.
+    - name: first_name
+      description: Nombre usuario.
+    - name: email
+      description: Correo electrónico del usuario.
+    - name: _fivetran_deleted
+      description: Fecha de borrado.
+    - name: date_load
+      description: Fecha de carga desde fivetran.
+
+  - name: stg_shipping_service
+    description: Datos del la compañia de transportes.
+    docs:
+      node_color: "#3498db"
+    columns:
+    - name: shipping_services_id
+      description: Identificador único formado por el haasheo del shipping_service de orders.
+      tests:
+        - not_null
+        - unique
+    - name: shipping_company_name
+      description: Nombre de la compañia de transportes
+
+  - name: stg_inventories
+    description: Contiene los datos de stock de cada producto junto a la fecha haciendo un snapshop para mantener un historico.
+    docs:
+      node_color: "#3498db"
+    columns:
+      - name: inventory_id
+        description: Identificador único formado por el product_id y la fecha de carga.
+        tests:
+          - not_null
+          - unique
+      - name: product_stock
+        description: CAntidad de producto en almacen
+      - name: actual_date
+        description: Fecha de carga y clave foranea para relacionarse con date
+
+  - name: stg_products
+    description: Contiene los datos de cada producto
     columns:
       - name: product_id
         description: Identificador unico hashedo
@@ -19,10 +146,10 @@ models:
         description: Valor booleano que define si fue borrado o no
       - name: date_load
         description: Fecha en la que se carga el dato
+  
   - name: stg_addresses
     description: Contiene los datos de las direcciones (addresses)
-    docs:
-      node_color: "#3498db"
+
     columns:
       - name: address_id
         description: Identificador unico hashedo
@@ -41,7 +168,6 @@ models:
         description: Valor booleano que define si fue borrado o no
       - name: date_load
         description: Fecha en la que se carga el dato
-
 
   - name: stg_promos
     description: Contiene los datos de las promociones que se aplicarán a las orders
@@ -69,8 +195,7 @@ models:
       - name: date_load
         description: fecha en la que se carga el dato
 
-
-  - name: stg_date
+  - name: stg_dates
     description: Dimensión de tiempo/calendario generada a partir de date_spine
     docs:
       node_color: "#3498db"
