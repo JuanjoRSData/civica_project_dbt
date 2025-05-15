@@ -24,6 +24,8 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
+vars:
+  budget_date: '2024-10-01'
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
@@ -37,6 +39,39 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 models:
   my_new_project:
+  +transient: false
+  curso:
     # Applies to all files under models/example/
     example:
+    staging:
+      +materialized: view
+      +database: "{{ env_var('DBT_ENVIRONMENTS') }}_SILVER_DB"
+      google_sheets:
+        +schema: google_sheets
+      sql_server_dbo:
+        +schema: sql_server_dbo
+      
+    marts:
       +materialized: table
+      +database: "{{ env_var('DBT_ENVIRONMENTS') }}_GOLD_DB"
+      core:
+        +schema: core
+seeds:
+  +schema: seed_data
+  +database: "{{ env_var('DBT_ENVIRONMENTS') }}_BRONZE_DB"        
+snapshots:
+  +transient: false
+  +target_database: "{{ env_var('DBT_ENVIRONMENTS') }}_SILVER_DB"
+  +target_schema: snapshots
+
+on-run-start:
+  - "ALTER WAREHOUSE WH_CURSO_DATA_ENGINEERING RESUME;"
+  
+# models:
+  # my_new_project:
+    # Applies to all files under models/example/
+    # staging:
+      # +materialized: view
+    # marts:
+      # +materialized: table
+

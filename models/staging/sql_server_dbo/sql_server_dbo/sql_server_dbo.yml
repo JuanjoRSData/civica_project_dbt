@@ -1,0 +1,270 @@
+version: 2
+
+sources:
+
+  - name: sql_server_dbo # name of the source 
+    schema: sql_server_dbo # this is the schema our raw data lives in
+    database: "{{ env_var('DBT_ENVIRONMENTS') }}_BRONZE_DB" # this is the name of our database
+
+    quoting:
+      database: false
+      schema: false
+      identifier: false
+
+    freshness:
+      warn_after: {count: 1000, period: day}
+      error_after: {count: 1000, period: day}
+    loaded_at_field: _fivetran_synced
+
+    tables:
+      - name: addresses
+        columns:
+          - name: addresses_id
+            description: >
+              Number of each row from sql_serve_dbo hashed.
+          - name: zipcode
+            description: >
+              Zipcode as a number.
+          - name: country
+            description: >
+              Name of the country as a string.
+          - name: address
+            description: >
+              Address as street and number as a string.
+          - name: state
+            description: >
+              Country state as a string.
+          - name: fivetran_deleted
+          - name: _fivetran_synced
+      - name: events
+        columns:
+          - name: event_id
+            description: >
+              Hashed with an unique identifier.
+            tests:
+              - not_null
+              - unique
+          - name: page_url
+            description: >
+              Url where the info has been colected as a string.
+          - name: event_type
+            description: >
+              The kind of event that occurs in the page as a string.
+          - name: user_id
+            description: >
+              User identifier hashed, it's the foreign key wich reference an unique user.
+            tests:
+              - relationships:
+                  to: source('sql_server_dbo','users')
+                  field: user_id
+                  where: user_id - not_null
+          - name: product_id
+            description: >
+              Address identifier hashed, it's the foreign key wich reference an unique address.
+            tests:
+              - relationships:
+                  to: source('sql_server_dbo','addresses')
+                  field: promo_id
+                  where: promo_id - not_null
+          - name: session_id
+            description: >
+              Hashed Session identifier.
+          - name: created_at
+            description: >
+              Date when the user was created.
+          - name: order_id
+            description: >
+              Order identifier hashed, it's the foreign key wich reference an unique order.
+            tests:
+              - relationships:
+                  to: source('sql_server_dbo','orders')
+                  field: order_id
+                  where: order_id - not_null
+          - name: product_id
+            description: >
+              Product identifier hashed, it's the foreign key wich reference an unique product.
+            tests:
+              - relationships:
+                  to: source('sql_server_dbo','products')
+                  field: product_id
+                  where: product_id - not_null
+          - name: fivetran_deleted
+          - name: _fivetran_synced
+
+      - name: orders
+        columns:
+          - name: order_id
+            description: >
+              Hash with an unique identifier.
+            tests:
+              - not_null
+              - unique
+          - name: shipping_service
+            description: >
+              Ship company name as a string.
+          - name: shipping_cost
+            description: >
+              Ship cost as float.
+            tests:
+              - not_null
+          - name: address_id
+            description: >
+              Address identifier, it's the foreign key wich reference an unique address.
+            tests:
+              - relationships:
+                  to: source('sql_server_dbo','addresses')
+                  field: address_id
+                  where: address_id - not_null
+          - name: created_ud
+          - name: promo_id
+            description: >
+              Comes as a description and I will hash it to an unique identifier.
+            tests:
+              - relationships:
+                  to: source('sql_server_dbo','promos')
+                  field: promo_id
+                  where: promo_id - not_null
+          - name: estimated_delivery_at
+            description: >
+              Date with the stimated delivery time.
+          - name: order_cost
+            description: >
+              Order cost without shipping cost.
+            tests:
+              - not_null
+          - name: user_id
+            description: >
+              Unique idenfier hashed.
+            tests:
+              - relationships:
+                  to: source('sql_server_dbo','users')
+                  field: user_id
+                  where: user_id - not_null
+          - name: order_total
+            description: >
+              Order cost plus shipping cost as float.
+          - name: delivered_at
+            description: >
+              Delivery date.
+          - name: traking_id
+            description: >
+              Hashed identifier of traking.
+          - name: status
+            description: >
+              Status of the order, it has three of them (delivered, preparing, shipped) as a string.
+            tests:
+              - not_null
+              - accepted_values:
+                  values: ['delivered', 'preparing', 'shipped']
+          - name: fivetran_deleted
+          - name: _fivetran_synced
+      - name: order_items
+        columns:
+          - name: order_id
+            description: >
+              Order id wich is a foreign key to orders.
+            tests:
+              - relationships:
+                  to: source('sql_server_dbo','orders')
+                  field: order_id
+                  where: order_id - not_null
+          - name: product_id
+            description: >
+              Product id wich is a foreign key to product.
+            tests:
+              - relationships:
+                  to: source('sql_server_dbo','products')
+                  field: product_id
+                  where: order_id - not_null
+          - name: quantity
+            description: >
+              Quntity of a unique product as number.
+          - name: fivetran_deleted
+          - name: _fivetran_synced
+      - name: products
+        columns:
+          - name: product_id
+            description: >
+              It comes hashed id.
+            tests:
+              - not_null
+              - unique
+          - name: price
+            description: >
+              Product price as float.
+          - name: name
+            description: >
+              Name as string.
+          - name: inventory
+            description: >
+              Number of this product in stock.
+          - name: fivetran_deleted
+          - name: _fivetran_synced
+      - name: promos
+        columns:
+          - name: promo_id
+            description: >
+              Comes as a description and I will hash it to an unique identifier.
+            tests:
+              - not_null
+              - unique
+          - name: discount
+            description: >
+              Percentage of discount associate to this promo as number.
+            tests:
+              - not_null
+              - dbt_utils.accepted_range:
+                  min_value: 0
+                  max_value: 100
+          - name: status
+            description: >
+              If it's active or inactive as varchar.
+              tests:
+              - accepted_values:
+                  values: ['inactive', 'active']
+            tests:
+              - not_null
+          - name: fivetran_deleted
+          - name: _fivetran_synced
+
+      - name: users
+        columns:
+          - name: user_id
+            description: >
+              Hached id.
+            tests:
+              - not_null
+              - unique
+          - name: update_at
+            description: >
+              Date of update as date.
+          - name: address_id
+            description: >
+              Hashed address_id, it will be an foreign key to address.
+            tests:
+              - relationships:
+                  to: source('sql_server_dbo','addresses')
+                  field: address_id
+                  where: address_id - not_null
+          - name: last_name
+            description: >
+              varchar.
+          - name: created_at
+            description: >
+              Date when the user was created as date.
+          - name: phone_number
+            description: >
+              User phon number as a string.
+          - name: total_orders
+            description: >
+              It comes as null majorly as number.
+          - name: first_name
+            description: >
+              User firstname as string.
+          - name: email
+            description: >
+              User email as string.
+          - name: _fivetran_synced
+
+
+
