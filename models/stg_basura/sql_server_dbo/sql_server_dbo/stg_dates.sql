@@ -14,6 +14,7 @@ WITH date_spine AS (
 ),
 renamed_casted AS (
     select
+        date_day as date_id,
         date_day as fecha,
         day(date_day) as dia,
         month(date_day) as mes,
