@@ -1,0 +1,240 @@
+version: 2
+
+sources:
+
+  - name: fish_data # name of the source 
+    schema: fish_data # this is the schema our raw data lives in
+    database: "{{ env_var('DBT_ENVIRONMENTS') }}_BRONZE_DB" # this is the name of our database
+
+    quoting:
+      database: false
+      schema: false
+      identifier: false
+
+    freshness:
+      warn_after: {count: 1000, period: day}
+      error_after: {count: 1000, period: day}
+    loaded_at_field: _fivetran_synced
+
+    tables:
+
+      - name: fish
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: fish_id
+            description: >
+              Identificador unico as number.
+            tests:
+              - not_null
+              - unique
+          - name: nombre_cientifico
+            description: >
+              Nombre cientifico del pez.
+          - name: descriptor
+            description: >
+              Apellido de la primera persona que lo describio.
+          - name: anio_descripcion
+            description: >
+              Año en el que fue descrito.
+          - name: status_iucn
+            description: >
+              Status de riesgo de conservacion de la especie.
+            tests:
+              - not_null
+              - accepted_values:
+                  values: ['EX', 'EW', 'CR', 'EN', 'VU', 'NT', 'LC']
+          - name: familia
+            description: >
+              Familia taxonomica.
+          - name: genero
+            description: >
+              Genero taxonomico.
+          - name: tipo_agua
+            description: >
+              Agua en la que vive (salada/dulce).
+          - name: tamanio_medio
+            description: >
+              Tamaño medio del pez.
+          - name: tamanio_maximo
+            description: >
+              Tamaño maximo del pez.
+          - name: longevidad
+            description: >
+              Años que suele vivir.
+          - name: forma
+            description: >
+              Forma del pez.
+          - name: patron
+            description: >
+              Patron de colores.
+          - name: dieta
+            description: >
+              tipo de alimentación.
+          - name: sociabilidad
+            description: >
+              Modo de vida respecto a sus congeneres.
+          - name: territorial
+            description: >
+              Si el pez es territorial o no.
+          - name: modo_de_vida
+            description: >
+              Si es nocturno o diurno.
+          - name: reproducción
+            description: >
+              Tipo de reproducción.
+          - name: continente
+            description: >
+              Continente en el que vive.
+          - name: pais
+            description: >
+              País en el que vive.
+          - name: rio
+            description: >
+              Rio en el que vive.
+          - name: temperatura
+            description: >
+              Temperatura del agua en su origen.
+          - name: ph
+            description: >
+              Ph del agua en su origen.
+          - name: gh
+            description: >
+              Gh del agua en su origen.
+          - name: corriente
+            description: >
+              Tipo de corriente de su lugar de origen.
+          - name: volumen_minimo
+            description: >
+              Volumen minimo de agua para mantenerlo en cautividad.
+          - name: poblacion_minima
+            description: >
+              Poblacion minima en cautividad.
+          - name: temperatura_acuario
+            description: >
+              Temperatura del agua recomendable para mantenerlo en cautividad.
+          - name: ph_acuario
+            description: >
+              Ph del agua recomendable para mantenerlo en cautividad.
+          - name: dificultad
+            description: >
+              Dificultad para mantenerlo en cautividad.
+          - name: robustez
+            description: >
+              Resistencia del pez.
+          - name: comportamiento
+            description: >
+              Si es pacifico o agressivo.
+          - name: disponibilidad
+            description: >
+              La facilidad para encontrarlo en el mercado.
+          - name: _fivetran_synced
+            description: >
+              Number of the row position at the DB it will be deleted.
+      - name: paises
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: pais_id
+            description: >
+              Identificador unico as number.
+            tests:
+              - not_null
+              - unique
+          - name: nombre
+            description: >
+              Nombre del pais en español.
+          - name: name
+            description: >
+              Nombre del pais en ingles.
+          - name: nom
+            description: >
+              Nombre del pais en frances.
+          - name: iso2
+            description: >
+              Denominación iso2 para el pais.
+          - name: iso3
+            description: >
+              Denominación iso3 para el pais.
+          - name: phone_code
+            description: >
+              Código telefónico del país.
+          - name: continente
+            description: >
+              continente al que pertenece.
+          - name: _fivetran_synced
+            description: >
+              Number of the row position at the DB it will be deleted.
+      - name: ventas
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: venta_id
+            description: >
+              Identificador unico as number.
+            tests:
+              - not_null
+              - unique
+          - name: fecha_venta
+            description: >
+              Fecha en la que se produjo la venta.
+          - name: _fivetran_synced
+            description: >
+              Number of the row position at the DB it will be deleted.
+      - name: items_venta
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: item_ventas_id
+            description: >
+              Identificador unico as number.
+            tests:
+              - not_null
+              - unique
+          - name: venta_id
+            description: >
+              Clave foranea con relación a la tabla ventas.
+          - name: fish_id
+            description: >
+              Clave foranea con relación a la tabla fish.
+          - name: cantidad
+            description: >
+              Cantidad de un pez concreto vendido.
+          - name: _fivetran_synced
+            description: >
+              Number of the row position at the DB it will be deleted.
+      - name: precios
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: price_id
+            description: >
+              Identificador unico as number.
+            tests:
+              - not_null
+              - unique
+          - name: fish_id
+            description: >
+              Clave foranea con relación a la tabla fish.
+          - name: precio
+            description: >
+              Precio del pez.
+          - name: fecha
+            description: >
+              Fecha de asignación del precio.
+          - name: _fivetran_synced
+            description: >
+              Number of the row position at the DB it will be deleted.
+      - name: statuses
+        loaded_at_field: _fivetran_synced
+        columns:
+          - name: status_iucn_id
+            description: >
+              Identificador unico as number.
+            tests:
+              - not_null
+              - unique
+          - name: abreviatura_status
+            description: >
+              Abraviatura de dos letras del status.
+          - name: status_descripcion
+            description: >
+              Descripción completa del status.
+          - name: _fivetran_synced
+            description: >
+              Number of the row position at the DB it will be deleted.
