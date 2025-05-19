@@ -127,9 +127,7 @@ sources:
           - name: disponibilidad
             description: >
               La facilidad para encontrarlo en el mercado.
-          - name: _fivetran_synced
-            description: >
-              Number of the row position at the DB it will be deleted.
+          
       - name: paises
         loaded_at_field: _fivetran_synced
         columns:
@@ -175,9 +173,6 @@ sources:
           - name: fecha_venta
             description: >
               Fecha en la que se produjo la venta.
-          - name: _fivetran_synced
-            description: >
-              Number of the row position at the DB it will be deleted.
       - name: items_venta
         loaded_at_field: _fivetran_synced
         columns:
@@ -190,15 +185,12 @@ sources:
           - name: venta_id
             description: >
               Clave foranea con relación a la tabla ventas.
-          - name: fish_id
+          - name: pez_id
             description: >
               Clave foranea con relación a la tabla fish.
           - name: cantidad
             description: >
               Cantidad de un pez concreto vendido.
-          - name: _fivetran_synced
-            description: >
-              Number of the row position at the DB it will be deleted.
       - name: precios
         loaded_at_field: _fivetran_synced
         columns:
@@ -217,9 +209,6 @@ sources:
           - name: fecha
             description: >
               Fecha de asignación del precio.
-          - name: _fivetran_synced
-            description: >
-              Number of the row position at the DB it will be deleted.
       - name: statuses
         loaded_at_field: _fivetran_synced
         columns:
@@ -235,6 +224,3 @@ sources:
           - name: status_descripcion
             description: >
               Descripción completa del status.
-          - name: _fivetran_synced
-            description: >
-              Number of the row position at the DB it will be deleted.
