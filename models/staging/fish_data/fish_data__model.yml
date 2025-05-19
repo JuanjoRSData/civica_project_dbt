@@ -1,0 +1,267 @@
+version: 2
+
+models:
+  - name: fechas_dias 
+    description: File to configure the models config
+    docs:
+      show: false
+      node_color: "#cd7f32" 
+    columns:
+      - name: date_id 
+        description: Identificador único es la fecha 'dd/mm/yy'.
+        constraints:
+          - type: not_null
+          - type: unique
+      - name: fecha
+        description: fecha 'dd/mm/yy'.
+        constraints:
+          - type: not_null
+          - type: unique
+      - name: dia
+        description: Día de la fecha en números.
+        constraints:
+          - type: not_null
+      - name: mes
+        description: Mes del año en números.
+        constraints:
+          - type: not_null
+      - name: anio
+        description: Anio en números.
+        constraints:
+          - type: not_null
+      - name: dia_semana_numero
+        description: Día de la semana en número del 0 = domingo a 6 = sabado.
+        constraints:
+          - type: not_null
+      - name: nombre_dia
+        description: Nombre del día de la semana.
+        constraints:
+          - type: not_null
+      - name: semana_del_anio
+        description: Número de la semana en el año.
+        constraints:
+          - type: not_null
+      - name: nombre_mes
+        description: Nombre del mes.
+        constraints:
+          - type: not_null
+      - name: tipo_dia
+        description: Fin de semana o laborable.
+        constraints:
+          - type: not_null
+      - name: dia_trimestre
+        description: Dia del trimestre en.
+        constraints:
+          - type: not_null
+  - name: fechas_anios 
+    description: File to configure the models config
+    docs:
+      show: false
+      node_color: "#cd7f32" 
+    columns:
+      - name: fecha_anio_id 
+        description: Identificador único es la fecha 'dd/mm/yy'.
+        constraints:
+          - type: not_null
+          - type: unique
+      - name: fecha
+        description: fecha 'dd/mm/yy'.
+        constraints:
+          - type: not_null
+      - name: anio
+        description: Año de la fecha en números.
+        constraints:
+          - type: not_null
+  - name: fish
+    description: File to configure the models config
+    docs:
+      show: false
+      node_color: "#cd7f32" 
+    columns:
+      - name: fish_id 
+        description: Identificador único es la fecha 'dd/mm/yy'.
+        constraints:
+          - type: not_null
+          - type: unique
+      - name: nombre_cientifico
+        description: Nombre científico del pez.
+        constraints:
+          - type: not_null
+          - type: unique
+      - name: nombre_descriptor
+        description: Nombre de la persona que lo describio por primera vez.
+        constraints:
+          - type: not_null
+      - name: anio_descripcion 
+        description: Año como date, con mes 1 y dia 1.
+        constraints:
+          - type: not_null
+      - name: status_iucn
+        description:  Status de riesgo de conservacion de la especie.
+        constraints:
+          - type: not_null
+      - name: genero_id 
+        description: Es el nombre del genero hasheado que hará de clave foranea apuntando a la tabla generos.
+        constraints:
+          - type: not_null
+        tests:
+          - relationships:
+              to: ref('stg_fish_data_genero')
+              field: genero_id
+              config:
+                severity: error
+      - name: tipo_agua
+        description: Agua en la que vive (salada/dulce)..
+        constraints:
+          - type: not_null
+      - name: tamamio_medio_cm
+        description: Tamaño medio de esta especie.
+        constraints:
+          - type: not_null
+      - name: tamanio_maximo_cm
+        description: Tamaño máximo de esta especie.
+        constraints:
+          - type: not_null
+      - name: longevidad_anios
+        description: Años que suele vivir.
+        constraints:
+          - type: not_null
+      - name: forma
+        description: Forma de la especie.
+        constraints:
+          - type: not_null
+      - name: dieta
+        description: tipo de alimentación.
+        constraints:
+          - type: not_null
+      - name: sociabilidad
+        description: Modo de vida respecto a sus congeneres.
+        constraints:
+          - type: not_null
+      - name: territorial_bool
+        description: Si el pez es territorial o no.
+        constraints:
+          - type: not_null
+      - name: modo_de_vida
+        description: Si es nocturno o diurno.
+        constraints:
+          - type: not_null
+      - name: pais_id
+        description: País del que proviene originariamente.
+        constraints:
+          - type: not_null
+        tests:
+          - relationships:
+              to: ref('stg_fish_data_paises')
+              field: pais_id
+              config:
+                severity: error
+      - name: rio
+        description: Rio del que proviene originariamente.
+        constraints:
+          - type: not_null
+      - name: temperatura_minima_origen
+        description: Temperatura mínima del agua en su lugar de origen.
+        constraints:
+          - type: not_null
+      - name: temperatura_maxima_origen
+        description: Temperatura máxima del agua en su lugar de origen.
+        constraints:
+          - type: not_null
+      - name: ph_minimo_origen
+        description: Ph mínimo del agua en su lugar de origen.
+        constraints:
+          - type: not_null
+      - name: ph_maximo_origen
+        description: Ph máximo del agua en su lugar de origen.
+        constraints:
+          - type: not_null
+      - name: gh_minimo_origen
+        description: Gh mínimo del agua en su lugar de origen.
+        constraints:
+          - type: not_null
+      - name: gh_maximo_origen
+        description: Gh máximo del agua en su lugar de origen.
+        constraints:
+          - type: not_null
+      - name: corriente
+        description: Identificador único es la fecha 'dd/mm/yy'.
+        constraints:
+          - type: not_null
+      - name: volumen_minimo_litros
+        description: Volumen mínimo quee necesita el pez para vivir en cautividad.
+        constraints:
+          - type: not_null
+      - name: poblacion_minima
+        description: Población mínimo quee necesita el pez para vivir en cautividad.
+        constraints:
+          - type: not_null
+      - name: temperatura_acuario_minimo
+        description: Temperatura mínimo del agua en cautividad.
+        constraints:
+          - type: not_null
+      - name: temperatura_acuario_maximo
+        description: Temperatura máximo del agua en cautividad.
+        constraints:
+          - type: not_null
+      - name: ph_acuario_minimo
+        description: Ph mínimo del agua en cautividad.
+        constraints:
+          - type: not_null
+      - name: ph_acuario_maximo
+        description: Ph maximo del agua en cautividad.
+        constraints:
+          - type: not_null
+      - name: dificultad
+        description: Dificultad de mantenimiento.
+        constraints:
+          - type: not_null
+      - name: robustez
+        description: Resistencia del pez.
+        constraints:
+          - type: not_null
+      - name: comportamiento
+        description: Si es pacifico o agressivo.
+        constraints:
+          - type: not_null
+      - name: disponibilidad
+        description: La facilidad para encontrarlo en el mercado.
+        constraints:
+          - type: not_null
+  - name: items_venta
+    description: Tabla con las cantidades de specie vendida en una venta.
+    docs:
+      show: false
+      node_color: "#cd7f32" 
+    columns:
+      - name: items_venta_id
+        description: Identificador único es la fecha 'dd/mm/yy'.
+        constraints:
+          - type: not_null
+          - type: unique
+      - name: venta_id
+        description: Clave foranea que apunta a la tabla ventas.
+        constraints:
+          - type: not_null
+        tests:
+          - relationships:
+              to: ref('stg_fish_data_ventas')
+              field: venta_id
+              config:
+                severity: error
+      - name: fish_id
+        description: Clave foranea que apunta a la tabla fish.
+        constraints:
+          - type: not_null
+        tests:
+          - relationships:
+              to: ref('stg_fish_data_fish')
+              field: venta_id
+              config:
+                severity: error
+      - name: cantidad 
+        description: Cantidad de una especie vendida en una venta concreta.
+        constraints:
+          - type: not_null
+      
+
