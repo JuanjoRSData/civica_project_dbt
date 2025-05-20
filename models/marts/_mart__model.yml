@@ -1,0 +1,11 @@
+version: 2
+
+models:
+    - name: use_case__ventas_por_dias
+      description: Tabla con las cantidades de ventas hecha en una día.
+      docs:
+        show: false
+        node_color: "#cd7f32" 
+      columns:
+        - name: toal_ventas
+        - name: fecha_dia

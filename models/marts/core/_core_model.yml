@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: stg_fish_data__fechas_dias 
+  - name: dim_fechas_dias 
     description: File to configure the models config
     docs:
       show: false
@@ -12,6 +12,7 @@ models:
         constraints:
           - type: not_null
           - type: unique
+          - type: primary_key
       - name: fecha
         description: fecha 'dd/mm/yy'.
         constraints:
@@ -52,26 +53,7 @@ models:
         description: Dia del trimestre en.
         constraints:
           - type: not_null
-  - name: stg_fish_data__fechas_anios 
-    description: File to configure the models config
-    docs:
-      show: false
-      node_color: "#cd7f32" 
-    columns:
-      - name: fecha_anio_id 
-        description: Identificador único es la fecha 'dd/mm/yy'.
-        constraints:
-          - type: not_null
-          - type: unique
-      - name: fecha
-        description: fecha 'dd/mm/yy'.
-        constraints:
-          - type: not_null
-      - name: anio
-        description: Año de la fecha en números.
-        constraints:
-          - type: not_null
-  - name: stg_fish_data__fish
+  - name: dim_fish
     description: File to configure the models config
     docs:
       show: false
@@ -80,6 +62,7 @@ models:
       - name: fish_id 
         description: Identificador único es la fecha 'dd/mm/yy'.
         constraints:
+          - type: primary_key
           - type: not_null
           - type: unique
       - name: nombre_cientifico
@@ -92,127 +75,75 @@ models:
           - type: not_null
       - name: anio_descripcion 
         description: Año como date, con mes 1 y dia 1.
-        constraints:
-          - type: not_null
       - name: status_iucn
         description:  Status de riesgo de conservacion de la especie.
-        constraints:
-          - type: not_null
       - name: genero_id 
         description: Es el nombre del genero hasheado que hará de clave foranea apuntando a la tabla generos.
         constraints:
           - type: not_null
       - name: tipo_agua
-        description: Agua en la que vive (salada/dulce)..
-        constraints:
-          - type: not_null
+        description: Agua en la que vive (salada/dulce).
       - name: tamamio_medio_cm
         description: Tamaño medio de esta especie.
-        constraints:
-          - type: not_null
       - name: tamanio_maximo_cm
         description: Tamaño máximo de esta especie.
-        constraints:
-          - type: not_null
       - name: longevidad_anios
         description: Años que suele vivir.
-        constraints:
-          - type: not_null
       - name: forma
-        description: Forma de la especie.
-        constraints:
-          - type: not_null
+        description: Forma de la especie.   
       - name: dieta
-        description: tipo de alimentación.
-        constraints:
-          - type: not_null
+        description: tipo de alimentación.    
       - name: sociabilidad
-        description: Modo de vida respecto a sus congeneres.
-        constraints:
-          - type: not_null
+        description: Modo de vida respecto a sus congeneres. 
       - name: territorial_bool
         description: Si el pez es territorial o no.
-        constraints:
-          - type: not_null
       - name: modo_de_vida
         description: Si es nocturno o diurno.
-        constraints:
-          - type: not_null
       - name: pais_id
         description: País del que proviene originariamente.
         constraints:
           - type: not_null
       - name: rio
         description: Rio del que proviene originariamente.
-        constraints:
-          - type: not_null
       - name: temperatura_minima_origen
         description: Temperatura mínima del agua en su lugar de origen.
-        constraints:
-          - type: not_null
       - name: temperatura_maxima_origen
         description: Temperatura máxima del agua en su lugar de origen.
-        constraints:
-          - type: not_null
       - name: ph_minimo_origen
         description: Ph mínimo del agua en su lugar de origen.
-        constraints:
-          - type: not_null
       - name: ph_maximo_origen
         description: Ph máximo del agua en su lugar de origen.
-        constraints:
-          - type: not_null
       - name: gh_minimo_origen
         description: Gh mínimo del agua en su lugar de origen.
-        constraints:
-          - type: not_null
       - name: gh_maximo_origen
         description: Gh máximo del agua en su lugar de origen.
-        constraints:
-          - type: not_null
       - name: corriente
         description: Identificador único es la fecha 'dd/mm/yy'.
-        constraints:
-          - type: not_null
       - name: volumen_minimo_litros
         description: Volumen mínimo quee necesita el pez para vivir en cautividad.
-        constraints:
-          - type: not_null
       - name: poblacion_minima
         description: Población mínimo quee necesita el pez para vivir en cautividad.
-        constraints:
-          - type: not_null
       - name: temperatura_acuario_minimo
         description: Temperatura mínimo del agua en cautividad.
-        constraints:
-          - type: not_null
       - name: temperatura_acuario_maximo
         description: Temperatura máximo del agua en cautividad.
-        constraints:
-          - type: not_null
       - name: ph_acuario_minimo
-        description: Ph mínimo del agua en cautividad.
-        constraints:
-          - type: not_null
+        description: Ph mínimo del agua en cautividad.     
       - name: ph_acuario_maximo
         description: Ph maximo del agua en cautividad.
-        constraints:
-          - type: not_null
+     
       - name: dificultad
         description: Dificultad de mantenimiento.
-        constraints:
-          - type: not_null
+       
       - name: robustez
         description: Resistencia del pez.
-        constraints:
-          - type: not_null
+     
       - name: comportamiento
         description: Si es pacifico o agressivo.
-        constraints:
-          - type: not_null
+     
       - name: disponibilidad
-        description: La facilidad para encontrarlo en el mercado.    
-  - name: stg_fish_data__items_venta
+        description: La facilidad para encontrarlo en el mercado.
+  - name: fct__items_venta
     description: Tabla con las cantidades de specie vendida en una venta.
     docs:
       show: false
@@ -225,72 +156,26 @@ models:
           - type: unique
       - name: venta_id
         description: Clave foranea que apunta a la tabla ventas.
+        constraints:
+          - type: not_null
+          - type: unique    
       - name: fish_id
         description: Clave foranea que apunta a la tabla fish.
         constraints:
           - type: not_null
+          - type: foreign_key
+            to: ref('dim_fish')
+            to_columns: [fish_id]
       - name: cantidad 
         description: Cantidad de una especie vendida en una venta concreta.
         constraints:
-          - type: not_null
-  - name: stg_fish_data__ventas
-    description: Tabla con el id de venta y la fecha.
-    docs:
-      show: false
-      node_color: "#cd7f32" 
-    columns:
-      - name: venta_id
-        description: Identificador único.
+          - type: not_null    
+      - name: date_id 
+        description: Fecha venta.
         constraints:
-          - type: unique
-      - name: fecha_venta
-        description: Fecha de la venta.
-      - name: date_load 
-        description: Fecha de carga.
-  - name: stg_fish_data__precios
-
-    description: Tabla con el precio del pez y el fish_id como relación.
-    docs:
-      show: false
-      node_color: "#cd7f32" 
-    columns:
-      - name: precio_id
-        description: Identificador único.
-        constraints:
-          - type: not_null
-          - type: unique
-      - name: fish_id
-        description: Clave foranea que apunta a la tabla fish.
-        constraints:
-          - type: not_null
-      - name: precio
-        description: Precio del pez.
-        constraints:
-          - type: not_null
-      - name: fecha 
-        description: Fecha de en la  que el precio es validado.
-        constraints:
-          - type: not_null
-  - name: stg_fish_data__paises
-  
-    description: Tabla con el precio del pez y el fish_id como relación.
-    docs:
-      show: false
-      node_color: "#cd7f32" 
-    columns:
-      - name: pais_id
-        description: Identificador único formado por la nombre  hasheado.
-        constraints:
-          - type: not_null
-          - type: unique
-      - name: fish_id
-        description: Clave foranea que apunta a la tabla fish.
-        constraints:
-          - type: not_null
-      - name: precio
-        description: Precio del pez.
-        constraints:
-          - type: not_null
-
-        
+          - type: not_null 
+          - type: foreign_key
+            to: ref('dim_date')
+            to_columns: [date_id]
+                   
 
