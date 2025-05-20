@@ -8,7 +8,7 @@ with
 
 source_fish as (
 
-    select * from {{ ref('base_fish_data__fish_') }}
+    select * from {{ ref('base_fish_data__fish') }}
 
 ),
 

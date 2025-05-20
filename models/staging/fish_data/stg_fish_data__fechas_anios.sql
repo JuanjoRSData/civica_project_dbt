@@ -14,9 +14,9 @@ WITH date_spine AS (
 ),
 renamed_casted AS (
     select
-        date_day as fecha_anio_id,
-        date_day as fecha,
-        year(date_day) as anio,
+        date_year as fecha_anio_id,
+        date_year as fecha,
+        year(date_year) as anio,
     from date_spine
 )
 SELECT * FROM renamed_casted
