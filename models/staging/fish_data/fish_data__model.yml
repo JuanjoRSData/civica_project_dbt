@@ -263,5 +263,53 @@ models:
         description: Cantidad de una especie vendida en una venta concreta.
         constraints:
           - type: not_null
-      
+  - name: ventas
+    description: Tabla con el id de venta y la fecha.
+    docs:
+      show: false
+      node_color: "#cd7f32" 
+    columns:
+      - name: venta_id
+        description: Identificador único.
+        constraints:
+          - type: not_null
+          - type: unique
+      - name: fecha
+        description: Fecha de la venta.
+        constraints:
+          - type: not_null
+      - name: date_load 
+        description: Fecha de carga.
+        constraints:
+          - type: not_null
+  - name: precios
+    description: Tabla con el precio del pez y el fish_id como relación.
+    docs:
+      show: false
+      node_color: "#cd7f32" 
+    columns:
+      - name: precio_id
+        description: Identificador único formado por la fecha y el fish_id hasheado.
+        constraints:
+          - type: not_null
+          - type: unique
+      - name: fish_id
+        description: Clave foranea que apunta a la tabla fish.
+        constraints:
+          - type: not_null
+        tests:
+          - relationships:
+              to: ref('stg_fish_data__fish')
+              field: fish_id
+              config:
+                severity: error
+      - name: precio
+        description: Precio del pez.
+        constraints:
+          - type: not_null
+      - name: fechas 
+        description: Fecha de en la  que el precio es validado.
+        constraints:
+          - type: not_null
+        
 
