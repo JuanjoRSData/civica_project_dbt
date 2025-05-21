@@ -177,5 +177,10 @@ models:
           - type: foreign_key
             to: ref('dim_date')
             to_columns: [date_id]
+      - name: precio_unidad
+        description: Precio de cada pez de esa especie.
+        constraints:
+          - type: not_null
+
                    
 

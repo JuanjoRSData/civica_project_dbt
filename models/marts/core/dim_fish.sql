@@ -16,7 +16,7 @@ renamed as (
 
     select
         *
-    from source_fish
+    from source_fish f 
 
 )
 select * from renamed

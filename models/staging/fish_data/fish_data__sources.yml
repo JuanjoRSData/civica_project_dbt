@@ -12,8 +12,8 @@ sources:
       identifier: false
 
     freshness:
-      warn_after: {count: 1000, period: day}
-      error_after: {count: 1000, period: day}
+      warn_after: {count: 10, period: day}
+      error_after: {count: 10, period: day}
     loaded_at_field: _fivetran_synced
 
     tables:
@@ -200,9 +200,13 @@ sources:
           - name: precio
             description: >
               Precio del pez.
+            tests:
+              - not_null
           - name: fecha
             description: >
               Fecha de asignación del precio.
+            tests:
+              - not_null
       - name: statuses
         loaded_at_field: _fivetran_synced
         columns:
