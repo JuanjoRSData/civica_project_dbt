@@ -9,7 +9,7 @@ with
 
 source as (
 
-    select * from {{ ref('base_fish_data__paises') }}
+    select * from {{ source('fish_data', 'paises') }}
 
 ),
 

@@ -94,14 +94,13 @@ models:
         description: Año como date, con mes 1 y dia 1.
         constraints:
           - type: not_null
-      - name: status_iucn
-        description:  Status de riesgo de conservacion de la especie.
-        constraints:
-          - type: not_null
-      - name: genero_id 
+      - name: genero
         description: Es el nombre del genero hasheado que hará de clave foranea apuntando a la tabla generos.
         constraints:
           - type: not_null
+      - name: status_iucn
+        description: Es el nombre del genero hasheado que hará de clave foranea apuntando a la tabla generos.
+        
       - name: tipo_agua
         description: Agua en la que vive (salada/dulce)..
         constraints:

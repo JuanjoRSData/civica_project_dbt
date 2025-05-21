@@ -12,8 +12,7 @@ renamed as (
         {{ dbt_utils.generate_surrogate_key(['price_id'])}} AS precio_id,
         {{ dbt_utils.generate_surrogate_key(['fish_id'])}} AS fish_id ,
         precio,
-        fecha
-
+        fecha,
     from source
 
 )
