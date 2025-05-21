@@ -4,6 +4,7 @@
   )
 }}
 
+
 with 
 
 source as (
@@ -20,6 +21,6 @@ renamed as (
         status_descripcion
     from source
 
-)
+) 
 
 select * from renamed

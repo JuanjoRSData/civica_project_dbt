@@ -56,25 +56,27 @@ vars:
 
 models:
   civica_project_dbt:
-  +transient: false
-  staging:
-    +materialized: view
-    +database: "{{ env_var('DBT_ENVIRONMENTS') }}_SILVER_DB"
-    fish_data:
-      +schema: fish_data
+    +transient: false
+    staging:
+      +materialized: view
+      +database: "{{ env_var('DBT_ENVIRONMENTS') }}_SILVER_DB"
+      fish_data:
+        +schema: fish_data
 
-  marts:
-    +materialized: table
-    +database: "{{ env_var('DBT_ENVIRONMENTS') }}_GOLD_DB"
-    core:
-      +schema: core
+    marts:
+      +materialized: table
+      +database: "{{ env_var('DBT_ENVIRONMENTS') }}_GOLD_DB"
+      core:
+        +schema: core
 seeds:
-  +schema: seed_data
-  +database: "{{ env_var('DBT_ENVIRONMENTS') }}_BRONZE_DB"
+  civica_project_dbt:
+    +schema: seed_data
+    +database: "{{ env_var('DBT_ENVIRONMENTS') }}_BRONZE_DB"
 snapshots:
-  +transient: false
-  +target_database: "{{ env_var('DBT_ENVIRONMENTS') }}_SILVER_DB"
-  +target_schema: snapshots
+  civica_project_dbt:
+    +transient: false
+    +target_database: "{{ env_var('DBT_ENVIRONMENTS') }}_SILVER_DB"
+    +target_schema: snapshots
 #on-run-start:
 #  - "ALTER WAREHOUSE WH_CURSO_DATA_ENGINEERING RESUME;"
 
