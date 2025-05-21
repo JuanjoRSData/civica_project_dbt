@@ -1,0 +1,199 @@
+version: 2
+
+models:
+    - name: use_case__dias_semana_con_mas_ventas
+      description: Modelo que analiza la cantidad de ventas en función del día de la semana.
+      docs:
+        show: false
+        node_color: "#cd7f32" 
+      columns:
+        - name: nombre_dia
+          tests:
+            - not_null
+        - name: importe_total
+          tests:
+            - not_null
+        - name: ranking
+          tests:
+            - not_null
+    - name: use_case__top3_mas_menos_vendidos_mes
+      description: Modelo que analiza la las 3 especies más vendidas y las 3 menos vendidas por mes.
+      docs:
+        show: false
+        node_color: "#cd7f32" 
+      columns:
+        - name: mes
+          tests:
+            - not_null
+        - name: posicion   
+          tests:
+            - not_null
+        - name: fish_id   
+          tests:
+            - not_null
+        - name: nombre_cientifico   
+          tests:
+            - not_null
+        - name: unidades
+          tests:
+            - not_null
+        - name: importe
+          tests:
+            - not_null
+    - name: use_case__ventas_totale_por_dias
+      description: Tabla con las cantidades de ventas hecha en una día desde que hay registros.
+      docs:
+        show: false
+        node_color: "#cd7f32" 
+      columns:
+        - name: fecha
+          tests:
+            - not_null
+        - name: dia_semana   
+          tests:
+            - not_null
+        - name: unidades_vendidas   
+          tests:
+            - not_null
+        - name: importe_total   
+          tests:
+            - not_null
+        - name: cantidad_transacciones
+          tests:
+            - not_null
+        - name: ticket_promedio
+          tests:
+            - not_null
+    - name: use_case_static__peces_compatibles_por_ph_gh
+      description: "Modelo que analiza la compatibilidad entre especies de peces basado en sus requerimientos de agua"
+      docs:
+        show: false
+        node_color: "#cd7f32" 
+      columns:
+      - name: nombre_cientifico
+        description: "Nombre científico del pez"
+        tests:
+          - not_null
+          
+      - name: ph minimo_origen
+        description: "Valor mínimo de pH en el hábitat natural"
+        tests:
+          - not_null
+
+      - name: ph_maximo_origen
+        description: "Valor máximo de pH en el hábitat natural"
+        tests:
+          - not_null
+
+
+      - name: gh_minimo_origen
+        description: "Dureza general mínima (GH) en el hábitat natural"
+        tests:
+          - not_null
+
+      - name: gh_maximo_origen
+        description: "Dureza general máxima (GH) en el hábitat natural"
+        tests:
+          - not_null
+
+      - name: temperatura_minima_origen
+        description: "Temperatura mínima en el hábitat natural (°C)"
+        tests:
+          - not_null
+
+      - name: temperatura_maxima_origen
+        description: "Temperatura máxima en el hábitat natural (°C)"
+        tests:
+          - not_null
+
+      - name: tamanio_medio_cm
+        description: "Tamaño medio del pez en centímetros"
+        tests:
+          - not_null
+
+      - name: dificultad
+        description: "Nivel de dificultad para mantener el pez en acuario"
+
+
+      - name: compatibilidad
+        description: "Nivel de compatibilidad con parámetros de referencia"
+
+
+      - name: desviacion_ph
+        description: "Desviación del pH respecto a valores ideales"
+        
+      - name: desviacion_gh
+        description: "Desviación de la dureza (GH) respecto a valores ideales"
+
+    - name: use_case_static_vida_media_por_genero
+      description: "Análisis de longevidad de especies de peces agrupadas por género"
+      docs:
+        show: false
+        node_color: "#cd7f32"
+      columns:
+      - name: genero
+        description: "Género taxonómico del pez"
+        tests:
+          - not_null
+            
+      - name: cantidad_especies
+        description: "Número total de especies registradas para este género"
+        tests:
+          - not_null
+
+      - name: media_vida_anios
+        description: "Promedio de longevidad en años para el género"
+        tests:
+          - not_null
+
+      - name: minima_vida
+        description: "Longevidad mínima registrada en el género (años)"
+        tests:
+          - not_null
+
+      - name: maxima_vida
+        description: "Longevidad máxima registrada en el género (años)"
+        tests:
+          - not_null
+    - name: use_case_static_pais_num_especies_and_avgs
+      description: "Análisis de especies de peces por país con rangos ambientales promedio"
+      docs:
+        show: false
+        node_color: "#cd7f32"
+      columns:
+      - name: pais_id
+        description: "Identificador único del país"
+        tests:
+          - not_null
+          - unique
+          
+      - name: nombre
+        description: "Nombre del país"
+        tests:
+          - not_null
+
+      - name: cantidad_especies
+        description: "Número total de especies nativas registradas"
+        tests:
+          - not_null
+
+      - name: rango_ph_promedio
+        description: "Rango promedio de pH (diferencia entre máximo y mínimo)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [">=0", "<=14"]
+
+      - name: rango_gh_promedio
+        description: "Rango promedio de dureza general (GH)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [">=0"]
+
+      - name: rango_temp_promedio
+        description: "Rango promedio de temperatura en °C"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [">=0"]

@@ -6,7 +6,7 @@
 
 with 
 
-source_fish as (
+source_items as (
 
     select * from {{ source('fish_data', 'items_venta') }}
 
@@ -19,7 +19,8 @@ renamed as (
         {{ dbt_utils.generate_surrogate_key(['venta_id'])}} AS venta_id,
         {{ dbt_utils.generate_surrogate_key(['pez_id'])}} AS fish_id,
         cantidad
-    from source_fish 
+    from source_items 
 
+    
 )
 select * from renamed

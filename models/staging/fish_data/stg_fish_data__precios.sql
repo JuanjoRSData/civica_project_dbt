@@ -1,9 +1,3 @@
-{{
-  config(
-    materialized='view'
-  )
-}}
-
 with 
 
 source as (
@@ -15,8 +9,8 @@ source as (
 renamed as (
 
     select
-        {{ dbt_utils.generate_surrogate_key(['price_id'])}} AS price_id,
-        {{ dbt_utils.generate_surrogate_key(['fish_id'])}} AS fish_id,
+        {{ dbt_utils.generate_surrogate_key(['price_id'])}} AS precio_id,
+        {{ dbt_utils.generate_surrogate_key(['fish_id'])}} AS fish_id ,
         precio,
         fecha
 

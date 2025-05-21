@@ -12,8 +12,8 @@ sources:
       identifier: false
 
     freshness:
-      warn_after: {count: 1000, period: day}
-      error_after: {count: 1000, period: day}
+      warn_after: {count: 10, period: day}
+      error_after: {count: 10, period: day}
     loaded_at_field: _fivetran_synced
 
     tables:
@@ -30,7 +30,7 @@ sources:
           - name: nombre_cientifico
             description: >
               Nombre cientifico del pez.
-          - name: descriptor
+          - name: nombre_descriptor
             description: >
               Apellido de la primera persona que lo describio.
           - name: anio_descripcion
@@ -79,7 +79,7 @@ sources:
           - name: modo_de_vida
             description: >
               Si es nocturno o diurno.
-          - name: reproducción
+          - name: reproduccion
             description: >
               Tipo de reproducción.
           - name: continente
@@ -88,16 +88,16 @@ sources:
           - name: pais
             description: >
               País en el que vive.
-          - name: rio
+          - name: rios
             description: >
               Rio en el que vive.
-          - name: temperatura
+          - name: temperatura_origen
             description: >
               Temperatura del agua en su origen.
-          - name: ph
+          - name: ph_origen
             description: >
               Ph del agua en su origen.
-          - name: gh
+          - name: gh_origen
             description: >
               Gh del agua en su origen.
           - name: corriente
@@ -131,15 +131,11 @@ sources:
       - name: paises
         loaded_at_field: _fivetran_synced
         columns:
-          - name: pais_id
-            description: >
-              Identificador unico as number.
-            tests:
-              - not_null
-              - unique
           - name: nombre
             description: >
               Nombre del pais en español.
+            tests:
+              - not_null
           - name: name
             description: >
               Nombre del pais en ingles.
@@ -158,15 +154,13 @@ sources:
           - name: continente
             description: >
               continente al que pertenece.
-          - name: _fivetran_synced
-            description: >
-              Number of the row position at the DB it will be deleted.
+
       - name: ventas
         loaded_at_field: _fivetran_synced
         columns:
           - name: venta_id
             description: >
-              Identificador unico as number.
+              Identificador unico.
             tests:
               - not_null
               - unique
@@ -206,9 +200,13 @@ sources:
           - name: precio
             description: >
               Precio del pez.
+            tests:
+              - not_null
           - name: fecha
             description: >
               Fecha de asignación del precio.
+            tests:
+              - not_null
       - name: statuses
         loaded_at_field: _fivetran_synced
         columns:
