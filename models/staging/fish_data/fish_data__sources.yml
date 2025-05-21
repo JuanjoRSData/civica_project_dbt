@@ -19,7 +19,7 @@ sources:
     tables:
 
       - name: fish
-        loaded_at_field: _fivetran_synced
+ 
         columns:
           - name: fish_id
             description: >
@@ -129,7 +129,7 @@ sources:
               La facilidad para encontrarlo en el mercado.
           
       - name: paises
-        loaded_at_field: _fivetran_synced
+
         columns:
           - name: nombre
             description: >
@@ -156,7 +156,7 @@ sources:
               continente al que pertenece.
 
       - name: ventas
-        loaded_at_field: _fivetran_synced
+
         columns:
           - name: venta_id
             description: >
@@ -168,7 +168,7 @@ sources:
             description: >
               Fecha en la que se produjo la venta.
       - name: items_venta
-        loaded_at_field: _fivetran_synced
+
         columns:
           - name: item_ventas_id
             description: >
@@ -186,7 +186,6 @@ sources:
             description: >
               Cantidad de un pez concreto vendido.
       - name: precios
-        loaded_at_field: _fivetran_synced
         columns:
           - name: price_id
             description: >
@@ -208,7 +207,7 @@ sources:
             tests:
               - not_null
       - name: statuses
-        loaded_at_field: _fivetran_synced
+
         columns:
           - name: status_iucn_id
             description: >

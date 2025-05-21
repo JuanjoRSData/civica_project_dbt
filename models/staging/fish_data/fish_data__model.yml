@@ -271,7 +271,6 @@ models:
         constraints:
           - type: not_null
   - name: stg_fish_data__paises
-  
     description: Tabla con el precio del pez y el fish_id como relación.
     docs:
       show: false
@@ -290,6 +289,45 @@ models:
         description: Precio del pez.
         constraints:
           - type: not_null
+
+  - name: stg_fish_data__status_fish
+    description: Tabla con el precio del pez y el fish_id como relación.
+    docs:
+      show: false
+      node_color: "#cd7f32" 
+    columns:
+      - name: status_iucn_id
+        description: Identificador único formado por la nombre  hasheado.
+        constraints:
+          - type: not_null
+          - type: unique
+      - name: fish_id
+        description: Clave foranea que apunta a la tabla fish.
+        constraints:
+          - type: not_null
+      - name: creation_date
+        description: Fecha de ingesta.
+        constraints:
+          - type: not_null
+
+  - name: stg_fish_data__genero
+    description: Tabla con el precio del pez y el fish_id como relación.
+    docs:
+      show: false
+      node_color: "#cd7f32" 
+    columns:
+      - name: genero_id
+        description: Identificador único formado por la nombre  hasheado.
+        constraints:
+          - type: not_null
+          - type: unique
+      - name: familia
+        description: Clave foranea que apunta a la tabla fish.
+        constraints:
+          - type: not_null
+
+ 
+  
 
         
 

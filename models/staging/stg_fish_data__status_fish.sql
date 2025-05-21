@@ -14,14 +14,15 @@ source_fish as (
 
 source_status as (
 
-    select * from {{ ref('base_fish_data__statuses') }}
+    select * from {{ source('fish_data', 'statuses') }}
 
 ),
 
 renamed as (
 
     select
-        {{ dbt_utils.generate_surrogate_key(['f.fish_id'])}} AS status_fish_id,
+        {{ dbt_utils.generate_surrogate_key(['s.status_uicn_id'])}} AS status_uicn_id,
+        {{ dbt_utils.generate_surrogate_key(['f.fish_id'])}} AS status_uicn_id,
         abreviatura_status,        
         status_descripcion
     from source_fish f
